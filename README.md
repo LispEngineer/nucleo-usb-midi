@@ -42,6 +42,13 @@ The Nucleo board default IOC configuration include:
 Make sure this builds and pushes using Segger J-Link.
 (It does.)
 
+
+# Initial Software Configuration and Test
+
+First, we prove the USB port on the Nucleo board
+works fine with known good code as provided by
+default by the USB Middleware.
+
 Update IOC for `USB_DEVICE` Middleware:
 * FS IP: Human Interface Device Class (HID)
 * Generate code
@@ -164,12 +171,6 @@ Build and push. It works.
 Note that when you push and hold the `RESET` button on the Nucleo,
 the board de-registers from USB. If you just tap it, it will
 deregister and re-register quicly.
-
-# Initial Software Configuration and Test
-
-First, we prove the USB port on the Nucleo board
-works fine with known good code as provided by
-default by the USB Middleware.
 
 
 # Converting to USB MIDI Device
