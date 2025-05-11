@@ -23,6 +23,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "usbd_hid.h"
 
 /* USER CODE END Includes */
 
@@ -81,6 +82,17 @@ static void MX_USART3_UART_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
+
+typedef struct {
+ int8_t buttons;
+ int8_t x;
+ int8_t y;
+ int8_t wheel;
+} Mouse;
+Mouse mouse_status = {0};
+
+extern USBD_HandleTypeDef hUsbDeviceFS; // usb_device.c
+
 /* USER CODE END 0 */
 
 /**
@@ -121,11 +133,29 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+
+  // The USB system seems to take a moment to connect and do whatever it needs to do.
+  // If we immediately start calling USBD_HID_SendReport it will fail a while.
+  HAL_Delay(1000);
+  mouse_status.x = 1;
+
   while (1)
   {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+    HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin);
+
+    // https://community.st.com/t5/stm32-mcus-products/hid-mouse-doesn-t-move/td-p/633976
+    // How can we determine if the USB HID is fully set up and ready to send data to?
+    // mouse_status.x = -mouse_status.x;
+    if (USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t *)&mouse_status, sizeof(Mouse)) != USBD_OK) {
+      HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);
+      HAL_Delay(10);
+      HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
+    }
+
+    HAL_Delay(249);
   }
   /* USER CODE END 3 */
 }

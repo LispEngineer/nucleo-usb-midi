@@ -155,6 +155,11 @@ bDevCapabilityType:                0x02
 bmAttributes:                      0x00000002  -> Supports Link Power Management protocol
 ```
 
+Now, add code to prove that the device works:
+Move the cursor +1 X pixel every quarter of
+a second or so.
+
+Build and push. It works.
 
 # Initial Software Configuration and Test
 
