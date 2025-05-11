@@ -161,6 +161,10 @@ a second or so.
 
 Build and push. It works.
 
+Note that when you push and hold the `RESET` button on the Nucleo,
+the board de-registers from USB. If you just tap it, it will
+deregister and re-register quicly.
+
 # Initial Software Configuration and Test
 
 First, we prove the USB port on the Nucleo board
@@ -174,3 +178,14 @@ Now, we will follow the instructions in the
 [STM32 MIDI Box](https://github.com/Hypnotriod/midi-box-stm32)
 project to modify the USB device implementation to be
 a MIDI device.
+
+
+# Open Questions
+
+* How do we know when we can submit a new IN packet for USB transfer?
+  * How do we know when the current IN packet is acknowledged & delivered?
+  * How do we know when the current IN packet is requested?
+  * Is there an atomic mechanism to replace the current IN packet with a
+    different one, prior to it being picked up?
+  * Is there a way to cancel a previously scheduled IN packet before it
+    is sent (or started to be sent)?
