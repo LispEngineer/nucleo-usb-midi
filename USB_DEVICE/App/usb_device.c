@@ -26,6 +26,7 @@
 #include "usbd_hid.h"
 
 /* USER CODE BEGIN Includes */
+#include "usbd_midi.h"
 
 /* USER CODE END Includes */
 
@@ -64,6 +65,14 @@ void MX_USB_DEVICE_Init(void)
 {
   /* USER CODE BEGIN USB_DEVICE_Init_PreTreatment */
 
+  // NOTE: Replace the RegisterClass below with
+  // if (USBD_RegisterClass(&hUsbDeviceFS, &USBD_MIDI) != USBD_OK)
+  // as this will likely be erased when the system regenerates code
+#ifdef USBD_HID
+#error USBD_HID already defined!
+#endif
+#define USBD_HID USBD_MIDI
+
   /* USER CODE END USB_DEVICE_Init_PreTreatment */
 
   /* Init Device Library, add supported class and start the library. */
@@ -81,7 +90,7 @@ void MX_USB_DEVICE_Init(void)
   }
 
   /* USER CODE BEGIN USB_DEVICE_Init_PostTreatment */
-
+#undef USBD_HID
   /* USER CODE END USB_DEVICE_Init_PostTreatment */
 }
 

@@ -180,6 +180,175 @@ Now, we will follow the instructions in the
 project to modify the USB device implementation to be
 a MIDI device.
 
+* Add the `usbd_midi.c` and `.h` files, including compiler include path settings
+* Modify the `usb_device.c` per instructions
+  * I used a `#define` and `#undef` since making the change requested
+    would not persist after code generation (which I do a lot)
+* Modify `main.h` per instructions
+
+Major differences:
+
+* The STM32F7 is very different than the STM32F1.
+  * The STM32F1 uses a Packet Memory Area (PMA) for USB endpoint buffers. 
+  * The STM32F7 utilizes a different mechanism for endpoint memory 
+    management, and HAL_PCDEx_PMAConfig is not directly applicable. 
+
+Now, the device shows up in USBView as:
+
+```
+[Port4]  :  USB Audio Device
+
+
+Is Port User Connectable:         yes
+Is Port Debug Capable:            no
+Companion Port Number:            4
+Companion Hub Symbolic Link Name: USB#VID_14B0&PID_012D#5&3b72e4cf&0&17#{f18a0e88-c30c-11d0-8815-00a0c906bed8}
+Protocols Supported:
+ USB 1.1:                         yes
+ USB 2.0:                         yes
+ USB 3.0:                         no
+
+Device Power State:               PowerDeviceD0
+
+       ---===>Device Information<===---
+English product name: "MIDI LispEngineer"
+
+ConnectionStatus:                  
+Current Config Value:              0x01  -> Device Bus Speed: Full (is not SuperSpeed or higher capable)
+Device Address:                    0x26
+Open Pipes:                           2
+
+          ===>Device Descriptor<===
+bLength:                           0x12
+bDescriptorType:                   0x01
+bcdUSB:                          0x0201
+bDeviceClass:                      0x00  -> This is an Interface Class Defined Device
+bDeviceSubClass:                   0x00
+bDeviceProtocol:                   0x00
+bMaxPacketSize0:                   0x40 = (64) Bytes
+idVendor:                        0x0483 = STMicroelectronics
+idProduct:                       0x572B
+bcdDevice:                       0x0200
+iManufacturer:                     0x01
+     English (United States)  "LispEngineer using STM"
+iProduct:                          0x02
+     English (United States)  "MIDI LispEngineer"
+iSerialNumber:                     0x03
+     English (United States)  "3864355A3233"
+bNumConfigurations:                0x01
+
+          ---===>Open Pipes<===---
+
+          ===>Endpoint Descriptor<===
+bLength:                           0x09
+bDescriptorType:                   0x05
+bEndpointAddress:                  0x01  -> Direction: OUT - EndpointID: 1
+bmAttributes:                      0x02  -> Bulk Transfer Type
+wMaxPacketSize:                  0x0040 = 0x40 bytes
+wInterval:                       0x0000
+bSyncAddress:                      0x00
+
+          ===>Endpoint Descriptor<===
+bLength:                           0x09
+bDescriptorType:                   0x05
+bEndpointAddress:                  0x81  -> Direction: IN - EndpointID: 1
+bmAttributes:                      0x02  -> Bulk Transfer Type
+wMaxPacketSize:                  0x0040 = 0x40 bytes
+wInterval:                       0x0000
+bSyncAddress:                      0x00
+
+       ---===>Full Configuration Descriptor<===---
+
+          ===>Configuration Descriptor<===
+bLength:                           0x09
+bDescriptorType:                   0x02
+wTotalLength:                    0x0053  -> Validated
+bNumInterfaces:                    0x01
+bConfigurationValue:               0x01
+iConfiguration:                    0x00
+bmAttributes:                      0x80  -> Bus Powered
+MaxPower:                          0xFA = 500 mA
+
+          ===>Interface Descriptor<===
+bLength:                           0x09
+bDescriptorType:                   0x04
+bInterfaceNumber:                  0x00
+bAlternateSetting:                 0x00
+bNumEndpoints:                     0x02
+bInterfaceClass:                   0x01  -> Audio Interface Class
+bInterfaceSubClass:                0x03  -> MIDI Streaming Interface SubClass
+bInterfaceProtocol:                0x00
+iInterface:                        0x00
+
+          ===>Descriptor Hex Dump<===
+bLength:                           0x07
+bDescriptorType:                   0x24
+07 24 01 00 01 41 00 
+
+          ===>Descriptor Hex Dump<===
+bLength:                           0x06
+bDescriptorType:                   0x24
+06 24 02 02 01 00 
+
+          ===>Descriptor Hex Dump<===
+bLength:                           0x09
+bDescriptorType:                   0x24
+09 24 03 01 02 01 01 01 00 
+
+          ===>Descriptor Hex Dump<===
+bLength:                           0x06
+bDescriptorType:                   0x24
+06 24 02 01 03 00 
+
+          ===>Descriptor Hex Dump<===
+bLength:                           0x09
+bDescriptorType:                   0x24
+09 24 03 02 04 01 03 01 00 
+
+          ===>Endpoint Descriptor<===
+bLength:                           0x09
+bDescriptorType:                   0x05
+bEndpointAddress:                  0x01  -> Direction: OUT - EndpointID: 1
+bmAttributes:                      0x02  -> Bulk Transfer Type
+wMaxPacketSize:                  0x0040 = 0x40 bytes
+wInterval:                       0x0000
+bSyncAddress:                      0x00
+
+          ===>Descriptor Hex Dump<===
+bLength:                           0x05
+bDescriptorType:                   0x25
+05 25 01 01 03 
+
+          ===>Endpoint Descriptor<===
+bLength:                           0x09
+bDescriptorType:                   0x05
+bEndpointAddress:                  0x81  -> Direction: IN - EndpointID: 1
+bmAttributes:                      0x02  -> Bulk Transfer Type
+wMaxPacketSize:                  0x0040 = 0x40 bytes
+wInterval:                       0x0000
+bSyncAddress:                      0x00
+
+          ===>Descriptor Hex Dump<===
+bLength:                           0x05
+bDescriptorType:                   0x25
+05 25 01 01 02 
+
+          ===>BOS Descriptor<===
+bLength:                           0x05
+bDescriptorType:                   0x0F
+wTotalLength:                      0x000C
+bNumDeviceCaps:                    0x01
+
+          ===>USB 2.0 Extension Descriptor<===
+bLength:                           0x07
+bDescriptorType:                   0x10
+bDevCapabilityType:                0x02
+bmAttributes:                      0x00000002  -> Supports Link Power Management protocol
+```
+
+## TODO
+
+* Send MIDI notes
 
 # Open Questions
 

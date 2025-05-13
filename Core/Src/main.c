@@ -149,11 +149,13 @@ int main(void)
     // https://community.st.com/t5/stm32-mcus-products/hid-mouse-doesn-t-move/td-p/633976
     // How can we determine if the USB HID is fully set up and ready to send data to?
     // mouse_status.x = -mouse_status.x;
+    /*
     if (USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t *)&mouse_status, sizeof(Mouse)) != USBD_OK) {
       HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);
       HAL_Delay(10);
       HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
     }
+    */
 
     HAL_Delay(249);
   }
