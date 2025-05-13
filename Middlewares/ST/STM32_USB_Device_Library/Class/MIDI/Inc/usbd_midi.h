@@ -171,6 +171,8 @@ extern void USBD_MIDI_DataInHandler(uint8_t * usb_rx_buffer, uint8_t usb_rx_buff
   * @{
   */ 
 uint8_t USBD_MIDI_SendReport (USBD_HandleTypeDef *pdev, uint8_t *report, uint16_t len);
+uint8_t USBD_MIDI_SendReportFrom(USBD_HandleTypeDef *pdev, uint8_t *report, uint16_t len, uint8_t endpoint); // DPF
+
 uint8_t *USBD_MIDI_DeviceQualifierDescriptor (uint16_t *length);
 uint8_t USBD_MIDI_GetState(USBD_HandleTypeDef  *pdev);
 uint8_t USBD_MIDI_GetDeviceState(USBD_HandleTypeDef  *pdev);

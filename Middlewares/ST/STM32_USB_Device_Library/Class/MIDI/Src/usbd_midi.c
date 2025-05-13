@@ -806,6 +806,42 @@ uint8_t USBD_MIDI_SendReport     (USBD_HandleTypeDef  *pdev,
   return USBD_OK;
 }
 
+/** DPF LispEngineer
+  * @brief  USBD_MIDI_SendReport
+  *         Send MIDI Report
+  * @param  pdev: device instance
+  * @param  report: pointer to report
+  * @param  len: size of report
+  * @param endpoint: Starting at 0
+  *                  FIXME: This does not work for endpoints other than 0 yet
+  *
+  * @retval status
+  */
+uint8_t USBD_MIDI_SendReportFrom     (USBD_HandleTypeDef  *pdev,
+                                 uint8_t *report,
+                                 uint16_t len,
+                                 uint8_t endpoint)
+{
+  if (endpoint >= MIDI_IN_PORTS_NUM) {
+    return USBD_FAIL;
+  }
+
+  USBD_MIDI_HandleTypeDef *hmidi = pdev->pClassData;
+
+  if (pdev->dev_state == USBD_STATE_CONFIGURED) {
+    if(hmidi->state == MIDI_IDLE) {
+      hmidi->state = MIDI_BUSY;
+      // FIXME: This does not work for endpoints but 0
+      return USBD_LL_Transmit(pdev, MIDI_EPIN_ADDR + endpoint, report, len);
+    } else {
+      return USBD_BUSY;
+    }
+  } else {
+    return USBD_FAIL;
+  }
+}
+
+
 /**
   * @brief  USBD_MIDI_GetCfgDesc 
   *         return configuration descriptor

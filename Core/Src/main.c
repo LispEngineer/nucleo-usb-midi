@@ -160,7 +160,7 @@ int main(void)
     // while (USBD_MIDI_GetState(&hUsbDeviceFS) != MIDI_IDLE) {};
 
     // FIXME: This will always return USBD_OK - improve the code
-    if (USBD_MIDI_SendReport(&hUsbDeviceFS, on ? noteOn : noteOff, on ? sizeof(noteOn) : sizeof(noteOff)) != USBD_OK) {
+    if (USBD_MIDI_SendReportFrom(&hUsbDeviceFS, on ? noteOn : noteOff, on ? sizeof(noteOn) : sizeof(noteOff), 0) != USBD_OK) {
       HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);
       HAL_Delay(10);
       HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);

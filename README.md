@@ -346,9 +346,12 @@ bDevCapabilityType:                0x02
 bmAttributes:                      0x00000002  -> Supports Link Power Management protocol
 ```
 
+Now, send MIDI notes using the library's function. This works.
+You can see them in [MidiView](https://hautetechnique.com/midi/midiview/).
+
 ## TODO
 
-* Send MIDI notes
+* Send MIDI notes on USB MIDI device interface 2
 
 # Open Questions
 
