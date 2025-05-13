@@ -24,6 +24,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "usbd_hid.h"
+#include "usbd_midi.h"
 
 /* USER CODE END Includes */
 
@@ -91,6 +92,16 @@ typedef struct {
 } Mouse;
 Mouse mouse_status = {0};
 
+/*
+ * MIDI event packet structure:
+ * |  4 bits  |  4 bits  |  4 bits  |  4 bits  |  8 bits  |  8 bits  |
+   |          |          |        MIDI_0       |  MIDI_1  |  MIDI_2  |
+   |   Cable  |   Code   |  Message |  Channel |  Byte 1  |  Byte 2  |
+ */
+
+uint8_t noteOn[] =  {0x09, 0x90, 48, 100}; // 48 = Middle C (?)
+uint8_t noteOff[] = {0x08, 0x80, 48, 10 };
+
 extern USBD_HandleTypeDef hUsbDeviceFS; // usb_device.c
 
 /* USER CODE END 0 */
@@ -101,6 +112,7 @@ extern USBD_HandleTypeDef hUsbDeviceFS; // usb_device.c
   */
 int main(void)
 {
+  uint8_t on = 1;
 
   /* USER CODE BEGIN 1 */
 
@@ -137,7 +149,6 @@ int main(void)
   // The USB system seems to take a moment to connect and do whatever it needs to do.
   // If we immediately start calling USBD_HID_SendReport it will fail a while.
   HAL_Delay(1000);
-  mouse_status.x = 1;
 
   while (1)
   {
@@ -146,16 +157,16 @@ int main(void)
     /* USER CODE BEGIN 3 */
     HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin);
 
-    // https://community.st.com/t5/stm32-mcus-products/hid-mouse-doesn-t-move/td-p/633976
-    // How can we determine if the USB HID is fully set up and ready to send data to?
-    // mouse_status.x = -mouse_status.x;
-    /*
-    if (USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t *)&mouse_status, sizeof(Mouse)) != USBD_OK) {
+    // while (USBD_MIDI_GetState(&hUsbDeviceFS) != MIDI_IDLE) {};
+
+    // FIXME: This will always return USBD_OK - improve the code
+    if (USBD_MIDI_SendReport(&hUsbDeviceFS, on ? noteOn : noteOff, on ? sizeof(noteOn) : sizeof(noteOff)) != USBD_OK) {
       HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);
       HAL_Delay(10);
       HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
+    } else {
+      on = !on;
     }
-    */
 
     HAL_Delay(249);
   }

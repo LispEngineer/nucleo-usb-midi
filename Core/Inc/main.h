@@ -46,8 +46,8 @@ extern "C" {
 
 /* Exported macro ------------------------------------------------------------*/
 /* USER CODE BEGIN EM */
-#define MIDI_IN_PORTS_NUM   0x01 // Specify input ports number of your device
-#define MIDI_OUT_PORTS_NUM  0x01 // Specify output ports number of your device
+#define MIDI_IN_PORTS_NUM   0x02 // IN to the computer - i.e., output from this device
+#define MIDI_OUT_PORTS_NUM  0x01 // OUT from the computer - i.e., input into this device
 /* USER CODE END EM */
 
 /* Exported functions prototypes ---------------------------------------------*/
