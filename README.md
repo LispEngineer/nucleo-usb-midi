@@ -363,6 +363,10 @@ Turn off USB HID:
   * Right click, pick properties
   * `C/C++ Build` -> `[All Configurations]`
   * Exclude resource from build: CHECKED
+  * Clean & build project
+* Now we can simply delete the `HID` directory
+  * Remove references to `usb_hid.h` in various includes
+  * Clean & build
 
 Files:
 * `usbd_desc.c` contains various strings in `USBD_DESC_Private_Defines` section
