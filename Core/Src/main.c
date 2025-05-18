@@ -99,8 +99,8 @@ Mouse mouse_status = {0};
    |   Cable  |   Code   |  Message |  Channel |  Byte 1  |  Byte 2  |
  */
 
-uint8_t noteOn[] =  {0x09, 0x90, 48, 100}; // 48 = Middle C (?)
-uint8_t noteOff[] = {0x08, 0x80, 48, 10 };
+uint8_t noteOn[] =  {0x19, 0x90, 48, 100}; // 48 = Middle C (?)
+uint8_t noteOff[] = {0x18, 0x80, 48, 10 };
 
 extern USBD_HandleTypeDef hUsbDeviceFS; // usb_device.c
 

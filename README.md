@@ -349,9 +349,26 @@ bmAttributes:                      0x00000002  -> Supports Link Power Management
 Now, send MIDI notes using the library's function. This works.
 You can see them in [MidiView](https://hautetechnique.com/midi/midiview/).
 
-## TODO
+## Sending to a second USB MIDI interface
 
 * Send MIDI notes on USB MIDI device interface 2
+  * This is as simple as setting the "Cable" setting
+    of the 32-bit USB MIDI 1.0 packet.
+  * Multiple "cables" do not use multiple USB Endpoints.
+
+## Changing the name of the second USB MIDI Interface
+
+Turn off USB HID:
+* `Middlewares/ST/STM32_USB_Device_Library/Class/HID`
+  * Right click, pick properties
+  * `C/C++ Build` -> `[All Configurations]`
+  * Exclude resource from build: CHECKED
+
+Files:
+* `usbd_desc.c` contains various strings in `USBD_DESC_Private_Defines` section
+  * Example: `USBD_PRODUCT_STRING_FS`
+    * Read by `USBD_FS_ProductStrDescriptor`
+    * Included in `USBD_DescriptorsTypeDef FS_Desc` in `usbd_desc.c`
 
 # Open Questions
 
