@@ -370,9 +370,51 @@ Turn off USB HID:
 
 Files:
 * `usbd_desc.c` contains various strings in `USBD_DESC_Private_Defines` section
-  * Example: `USBD_PRODUCT_STRING_FS`
+  * Example: `USBD_PRODUCT_STRING_FS` (value `MIDI LispEngineer`)
     * Read by `USBD_FS_ProductStrDescriptor`
     * Included in `USBD_DescriptorsTypeDef FS_Desc` in `usbd_desc.c`
+* This structure `FS_Desc` is set in `USBD_Init()` of `usbd_core.c`
+  * It becomes part of `USBD_HandleTypeDef -> pDesc`
+* It's then referenced in `usbd_ctlreq.c` in `USBD_GetDescriptor()`
+  * `USB_DESC_TYPE_STRING` for the `req->wValue >> 8` (a 16-bit unsigned int)
+  * Then the bottom byte is the string descriptor ID, example `USBD_IDX_LANGID_STR`
+
+Descriptors in `FSC_Desc`:
+* 0: Device
+* 1: LangID Str
+* 2: Manufacturer Str
+* 3: Product STr
+* 4: Serial Str
+* 5: Config Str
+* 6: Interface Str
+* 7: (LPM) USR_BOS
+
+So, let me do this:
+* Create new `USBD_IDX_MIDI_OUT2_STR` with `0x10U` in `usbd_def.h`
+* Add stuff in `usbd_desc.c`
+  * New String Define `USBD_MIDI_OUT2_FS`
+  * New function `USBD_FS_MIDIStrDescriptor()` that uses that string
+  * Add the definition in `usbd_desc.h`
+    * Include it in `usbd_ctlreq.c`
+* Edit `USBD_GetDescriptor` in the section of `USB_DESC_TYPE_STRING` in `usbd_ctlreq.c`
+  * Add new `case` for `USBD_IDX_MIDI_OUT2_STR`
+  * Call that new function above
+* At this point, we have now defined a new string descriptor #0x10, I believe -
+  code should build and run fine, but nothing different happens.
+* Add the `USBD_IDX_MIDI_OUT2_STR` to the appropriate `iJack` fields of the
+  MIDI IN Jack Descriptor
+  * As far as I can tell, this does nothing in Windows.
+  * TODO: Test MacOS, Linux, etc. (Not that I have MacOS devices.)
+
+Windows:
+* Per Gemini: **Windows**: Historically, Windows has been inconsistent in displaying 
+  these individual `iJackName` strings directly as the port names in 
+  Digital Audio Workstations (DAWs) or MIDI utilities. It often defaults to a pattern like 
+  "[Product Name] Port 1", "[Product Name] Port 2", etc., or 
+  "[Interface Name] Port 1". However, the custom names provided via `iJackName` might be 
+  visible in the Windows Device Manager (often under "Sound, video and game controllers" 
+  or sometimes "Software Devices" if a specific driver model is used). Recent updates 
+  to Windows MIDI Services are aiming for better naming fidelity.
 
 # Open Questions
 

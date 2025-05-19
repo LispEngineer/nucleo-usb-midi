@@ -69,6 +69,7 @@
 #define USBD_PRODUCT_STRING_FS     "MIDI LispEngineer"
 #define USBD_CONFIGURATION_STRING_FS     "MIDI Config"
 #define USBD_INTERFACE_STRING_FS     "MIDI Interface"
+#define USBD_MIDI_OUT2_FS     "Sending Notes"
 
 #define USB_SIZ_BOS_DESC            0x0C
 
@@ -364,6 +365,19 @@ uint8_t * USBD_FS_InterfaceStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *leng
   }
   return USBD_StrDesc;
 }
+
+/**
+  * @brief  Return the MIDI Output String Descriptor
+  * @param  speed : Current device speed (ignored)
+  * @param  length : Pointer to data length variable
+  * @retval Pointer to descriptor buffer
+  */
+uint8_t *USBD_FS_MIDIStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *length) {
+  USBD_GetString((uint8_t *)USBD_MIDI_OUT2_FS, USBD_StrDesc, length);
+  HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
+  return USBD_StrDesc;
+}
+
 
 #if (USBD_LPM_ENABLED == 1)
 /**

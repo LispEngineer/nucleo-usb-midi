@@ -19,6 +19,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "usbd_ctlreq.h"
 #include "usbd_ioreq.h"
+#include "usbd_desc.h"
 
 #ifdef USE_USBD_COMPOSITE
 #include "usbd_composite_builder.h"
@@ -554,6 +555,11 @@ static void USBD_GetDescriptor(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *r
             USBD_CtlError(pdev, req);
             err++;
           }
+          break;
+
+        case USBD_IDX_MIDI_OUT2_STR:
+          // Handle our MIDI Output name
+          USBD_FS_MIDIStrDescriptor(pdev->dev_speed, &len);
           break;
 
         default:

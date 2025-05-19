@@ -120,6 +120,7 @@ extern USBD_DescriptorsTypeDef FS_Desc;
   */
 
 /* USER CODE BEGIN EXPORTED_FUNCTIONS */
+uint8_t *USBD_FS_MIDIStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *length);
 
 /* USER CODE END EXPORTED_FUNCTIONS */
 
