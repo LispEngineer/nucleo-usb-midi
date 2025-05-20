@@ -416,6 +416,25 @@ Windows:
   or sometimes "Software Devices" if a specific driver model is used). Recent updates 
   to Windows MIDI Services are aiming for better naming fidelity.
 
+Mac:
+* I can see the Name showing up on an M3 MacBook Air running macOS 14.6.
+  * It is showing up as unicode junk though
+  * It only shows up in [WebMIDI Tester](https://studiocode.dev/webmidi-tester/),
+    not in `Audio MIDI Setup`
+    * `input MIDI LispEngineer Port 1`
+    * `input MIDI LispEngineer <garbled>`
+    * `output MIDI LispEngineer Port 1`
+  * This is due to a bug in `USBD_GetDescriptor()` which I fixed, and now it works!
+* Note: Mac will not update the name of a MIDI Jack unless you create a new configuration
+  in the MIDI Studio from scratch, so beware of that if you try to change your USB
+  device on the fly.
+
+TODO:
+* Figure out if it is the External or Embedded MIDI IN/OUT Jack Descriptor
+  that gets the name that shows up in Apple MIDI
+  * The possibilities are labeled as `It's either this one` or
+    `Or this one` in the code
+
 # Open Questions
 
 * How do we know when we can submit a new IN packet for USB transfer?

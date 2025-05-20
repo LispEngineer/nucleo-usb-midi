@@ -373,9 +373,23 @@ uint8_t * USBD_FS_InterfaceStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *leng
   * @retval Pointer to descriptor buffer
   */
 uint8_t *USBD_FS_MIDIStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *length) {
-  USBD_GetString((uint8_t *)USBD_MIDI_OUT2_FS, USBD_StrDesc, length);
   HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
+
+  USBD_GetString((uint8_t *)USBD_MIDI_OUT2_FS, USBD_StrDesc, length);
   return USBD_StrDesc;
+
+  /*
+  static uint8_t doug_desc[10] = {
+      10, // Length
+      USB_DESC_TYPE_STRING, // Descriptor type
+      'D', 0,
+      'o', 0,
+      'u', 0,
+      'g', 0
+  };
+  *length = sizeof(doug_desc);
+  return doug_desc;
+  */
 }
 
 

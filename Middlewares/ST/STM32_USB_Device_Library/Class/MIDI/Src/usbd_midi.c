@@ -210,7 +210,7 @@ __ALIGN_BEGIN static uint8_t USBD_MIDI_CfgDesc[USB_MIDI_CONFIG_DESC_SIZE]  __ALI
   0x02,                   /*bDescriptorSubtype: MIDI_IN_JACK subtype*/
   0x02,                   /*bJackType: EXTERNAL.*/
   MIDI_JACK_3,            /*bJackID: ID of this Jack.*/
-  USBD_IDX_MIDI_OUT2_STR,                   /*iJack: Unused.*/ // NOT THIS ONE EITHER
+  USBD_IDX_MIDI_OUT2_STR, /*iJack: Unused.*/ // It's either this one
 
   /******************** MIDI Adapter MIDI OUT Jack Descriptor (Embedded) ********************/
   0x09,                   /*bLength: Size of this descriptor, in bytes*/
@@ -221,7 +221,7 @@ __ALIGN_BEGIN static uint8_t USBD_MIDI_CfgDesc[USB_MIDI_CONFIG_DESC_SIZE]  __ALI
   0x01,                   /*bNrInputPins: Number of Input Pins of this Jack.*/
   MIDI_JACK_3,            /*BaSourceID(1): ID of the Entity to which this Pin is connected.*/
   0x01,                   /*BaSourcePin(1): Output Pin number of the Entity to which this Input Pin is connected.*/
-  USBD_IDX_MIDI_OUT2_STR,                   /*iJack: Unused.*/ // THIS ONE IS NOT IT
+  USBD_IDX_MIDI_OUT2_STR, /*iJack: Unused.*/ // Or this one
 #endif
 
 #if MIDI_IN_PORTS_NUM >= 3

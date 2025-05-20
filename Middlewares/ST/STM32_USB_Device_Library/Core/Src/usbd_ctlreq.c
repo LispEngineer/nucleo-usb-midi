@@ -559,7 +559,8 @@ static void USBD_GetDescriptor(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *r
 
         case USBD_IDX_MIDI_OUT2_STR:
           // Handle our MIDI Output name
-          USBD_FS_MIDIStrDescriptor(pdev->dev_speed, &len);
+          pbuf = USBD_FS_MIDIStrDescriptor(pdev->dev_speed, &len);
+          err = 0;
           break;
 
         default:
