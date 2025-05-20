@@ -913,7 +913,7 @@ static uint8_t  USBD_MIDI_DataOut (USBD_HandleTypeDef *pdev, uint8_t epnum)
 __weak extern void USBD_MIDI_DataInHandler(uint8_t * usb_rx_buffer, uint8_t usb_rx_buffer_length)
 {
   // For user implementation.
-  HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
+  // HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
 }
 
 /**

@@ -415,6 +415,11 @@ Windows:
   visible in the Windows Device Manager (often under "Sound, video and game controllers" 
   or sometimes "Software Devices" if a specific driver model is used). Recent updates 
   to Windows MIDI Services are aiming for better naming fidelity.
+* See also [Windows MIDI Services October 2024 Update](https://devblogs.microsoft.com/windows-music-dev/windows-midi-services-oct-2024-update/)
+  or [Windows MIDI on GitHub](https://microsoft.github.io/MIDI/)
+  * This stuff won't be properly available until end of 2025 it seems
+* It does seem that Windows queries the two strings due to the red LED
+  flashing upon board reset. I should verify this with my Cynthion.
 
 Mac:
 * I can see the Name showing up on an M3 MacBook Air running macOS 14.6.
